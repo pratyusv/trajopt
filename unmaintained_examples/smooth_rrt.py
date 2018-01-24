@@ -76,6 +76,8 @@ if __name__ == "__main__":
     traj=basemanip.MoveActiveJoints(goal=[0.609648, 1.37131, 1.6, -1.05298, -1.41295, -0.979627, 0.93925], 
                                     outputtrajobj=True,execute=False)    
     print "RRT done"
+    print("-----------TRAJ------------")
+    print(traj)
     if traj.GetNumWaypoints() == 0:
         raise Exception("planner couldn't find a path")
     ##################

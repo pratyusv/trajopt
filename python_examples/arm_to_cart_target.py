@@ -29,7 +29,7 @@ hmat_target = openravepy.matrixFromPose( np.r_[quat_target, xyz_target] )
 manip = robot.GetManipulator("rightarm")
 robot.SetActiveManipulator(manip)
 ikmodel = openravepy.databases.inversekinematics.InverseKinematicsModel(
-    robot, iktype=openravepy.IkParameterization.Type.Transform6D)
+    robot, iktype=openravepy.IkParameterizationType.Transform6D)
 if not ikmodel.load():
     ikmodel.autogenerate()
 init_joint_target = ku.ik_for_link(hmat_target, manip, "r_gripper_tool_frame",

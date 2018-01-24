@@ -65,6 +65,12 @@ public:
   void SetInitTraj(const TrajArray& x) {m_init_traj = x;}
   TrajArray GetInitTraj() {return m_init_traj;}
 
+  //Pratyush Functions
+
+ 
+
+  //End of my functions
+
   TrajPlotterPtr GetPlotter() {return m_trajplotter;}
 
   friend TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo&);

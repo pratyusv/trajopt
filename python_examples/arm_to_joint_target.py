@@ -1,6 +1,7 @@
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--interactive", action="store_true")
+#parser.add_argument("--interactive=True", action="True")
 args = parser.parse_args()
 
 import openravepy
@@ -19,7 +20,11 @@ robot = env.GetRobots()[0]
 joint_start = [-1.832, -0.332, -1.011, -1.437, -1.1  , -1.926,  3.074]
 robot.SetDOFValues(joint_start, robot.GetManipulator('rightarm').GetArmIndices())
 
+#print("---Arm Indices-- "+str(robot.GetManipulator('leftarm').GetArmIndices()))
+#print("---Arm Indices-- "+str(robot.GetManipulator('rightarm').GetArmIndices()))
+
 joint_target = [0.062, 1.287, 0.1, -1.554, -3.011, -0.268, 2.988]
+
 
 
 request = {
@@ -54,7 +59,12 @@ request = {
   }
 }
 s = json.dumps(request) # convert dictionary into json-formatted string
+# print("----JSON-----")
+# print(repr(s))
 prob = trajoptpy.ConstructProblem(s, env) # create object that stores optimization problem
+# print("-------PROB----------")
+# print(repr(prob))
+# print("-----------------")
 t_start = time.time()
 result = trajoptpy.OptimizeProblem(prob) # do optimization
 t_elapsed = time.time() - t_start

@@ -57,7 +57,7 @@ static vector<ConvexObjectivePtr> convexifyCosts(vector<CostPtr>& costs, const D
 static vector<ConvexConstraintsPtr> convexifyConstraints(vector<ConstraintPtr>& cnts, const DblVec& x, Model* model) {
   vector<ConvexConstraintsPtr> out(cnts.size());
   for (size_t i=0; i < cnts.size(); ++i) {
-    out[i] = cnts[i]->convex(x, model);
+    out[i] = cnts[i]->convex(x, model); // definition in modeling_utils.cpp line:15
   }
   return out;
 }
@@ -224,6 +224,12 @@ OptStatus BasicTrustRegionSQP::optimize() {
   vector<string> cnt_names = getCntNames(constraints);
 
   DblVec& x_ = results_.x; // just so I don't have to rewrite code
+  printf("\n----Calling from optimize.cpp----");
+
+  for(int i = 0; i < x_.size(); i++){
+    printf("\n X[%d] = %f",i,x_[i] );
+  }
+
   if (x_.size() == 0) PRINT_AND_THROW("you forgot to initialize!");
   if (!prob_) PRINT_AND_THROW("you forgot to set the optimization problem");    
   

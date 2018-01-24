@@ -14,6 +14,7 @@
 #include "utils/eigen_slicing.hpp"
 #include <boost/algorithm/string.hpp>
 #include "sco/optimizers.hpp"
+#include <stdio.h>
 using namespace Json;
 using namespace std;
 using namespace OpenRAVE;
@@ -261,7 +262,12 @@ TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo& pci) {
   const BasicInfo& bi = pci.basic_info;
   int n_steps = bi.n_steps;
 
+  // Pratyush
   TrajOptProbPtr prob(new TrajOptProb(n_steps, pci.rad));
+
+  TrajArray init = prob->GetInitTraj();
+  cout << endl << "TrajArray :" << init << endl ;
+
   int n_dof = prob->m_rad->GetDOF();
 
   DblVec cur_dofvals = prob->m_rad->GetDOFValues();
@@ -297,7 +303,27 @@ TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo& pci) {
 }
 TrajOptProbPtr ConstructProblem(const Json::Value& root, OpenRAVE::EnvironmentBasePtr env) {
   ProblemConstructionInfo pci(env);
-  pci.fromJson(root);
+  pci.fromJson(root); // Jumps to ProblemConstructionInfo::fromJson()
+  cout <<"Basic Info --- Construct Problem----" <<endl;
+
+  //  bool start_fixed;
+  // int n_steps;
+  // string manip;
+  // string robot; // optional
+  // IntVec dofs_fixed; // optional
+
+  cout <<"PCI : BasicInfo"<< endl;
+  cout <<"start_fixed :" <<pci.basic_info.start_fixed <<endl;
+  cout <<"n_steps :" <<pci.basic_info.n_steps <<endl;
+  cout <<"manip :" << pci.basic_info.manip << endl;
+  cout <<"robot :" << pci.basic_info.robot << endl;
+
+
+  cout<<" PCI : TermInfo "<<endl;
+  for (int i = 0; i < pci.cost_infos.size();i++){
+    cout<< "cost_infos "<< pci.cost_infos[i] <<endl;  
+  }
+    
   return ConstructProblem(pci);
 }
 

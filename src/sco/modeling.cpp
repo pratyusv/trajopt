@@ -213,6 +213,11 @@ vector<double> OptProb::getClosestFeasiblePoint(const vector<double>& x) {
   LOG_DEBUG("getClosestFeasiblePoint");
   assert(vars_.size() == x.size());
   QuadExpr obj;
+  printf(" ---Inside modelling.cpp---");
+  for (int i = 0; i < x.size(); i++){
+      printf("\nX[%d] = %f",i,x[i]);
+  }
+
   for (int i=0; i < x.size(); ++i) {
     exprInc(obj, exprSquare(exprSub(AffExpr(vars_[i]),x[i])));
   }
