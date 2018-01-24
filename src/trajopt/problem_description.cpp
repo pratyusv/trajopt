@@ -371,7 +371,7 @@ TrajOptResultPtr OptimizeProblem(TrajOptProbPtr prob, bool plot) {
 
   cout<<"----------------------------------------------------"<<endl;
   cout << "END : TrajOptResultPtr OptimizeProblem(TrajOptProbPtr prob, bool plot)" <<endl<<endl;
-  
+
   return TrajOptResultPtr(new TrajOptResult(opt.results(), *prob));
 }
 
@@ -546,6 +546,12 @@ void PoseCostInfo::fromJson(const Value& v) {
 }
 
 void PoseCostInfo::hatch(TrajOptProb& prob) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp " << endl;
+  cout<<" Function :  PoseCostInfo::hatch(TrajOptProb& prob)" << endl;
+  cout<<"----------------------------------------------------"<<endl;
+
   VectorOfVectorPtr f(new CartPoseErrCalculator(toRaveTransform(wxyz, xyz), prob.GetRAD(), link));
   if (term_type == TT_COST) {
     prob.addCost(CostPtr(new CostFromErrFunc(f, prob.GetVarRow(timestep), concat(rot_coeffs, pos_coeffs), ABS, name)));
@@ -557,10 +563,19 @@ void PoseCostInfo::hatch(TrajOptProb& prob) {
   prob.GetPlotter()->Add(PlotterPtr(new CartPoseErrorPlotter(f, prob.GetVarRow(timestep))));
   prob.GetPlotter()->AddLink(link);
 
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END  : PoseCostInfo::hatch(TrajOptProb& prob)" <<endl<<endl;
+
 }
 
 
 void JointPosCostInfo::fromJson(const Value& v) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp " << endl;
+  cout<<" Function :  JointPosCostInfo::fromJson(const Value& v)" << endl;
+  cout<<"----------------------------------------------------"<<endl;
+
   FAIL_IF_FALSE(v.isMember("params"));
   int n_steps = gPCI->basic_info.n_steps;
   const Value& params = v["params"];
@@ -576,6 +591,9 @@ void JointPosCostInfo::fromJson(const Value& v) {
   
   const char* all_fields[] = {"vals", "coeffs", "timestep"};
   ensure_only_members(params, all_fields, sizeof(all_fields)/sizeof(char*));
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END  : JointPosCostInfo::fromJson(const Value& v)" <<endl<<endl;
   
   
 }
