@@ -23,13 +23,14 @@ robot.SetDOFValues(joint_start, robot.GetManipulator('rightarm').GetArmIndices()
 #print("---Arm Indices-- "+str(robot.GetManipulator('leftarm').GetArmIndices()))
 #print("---Arm Indices-- "+str(robot.GetManipulator('rightarm').GetArmIndices()))
 
+#joint_target = [0.062, 1.287, 0.1, -1.554, -3.011, -0.268, 2.988]
 joint_target = [0.062, 1.287, 0.1, -1.554, -3.011, -0.268, 2.988]
 
 
 
 request = {
   "basic_info" : {
-    "n_steps" : 10,
+    "n_steps" : 5,
     "manip" : "rightarm", # see below for valid values
     "start_fixed" : True # i.e., DOF values at first timestep are fixed based on current robot state
   },

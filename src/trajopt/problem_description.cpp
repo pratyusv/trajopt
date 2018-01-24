@@ -29,6 +29,13 @@ bool gRegisteredMakers = false;
 
 
 void ensure_only_members(const Value& v, const char** fields, int nvalid) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  ensure_only_members(const Value& v, const char** fields, int nvalid) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+
   for (Json::ValueConstIterator it = v.begin(); it != v.end(); ++it) {
     bool valid = false;
     for (int j=0; j < nvalid; ++j) {
@@ -41,10 +48,18 @@ void ensure_only_members(const Value& v, const char** fields, int nvalid) {
       PRINT_AND_THROW( boost::format("invalid field found: %s")%it.memberName());
     }
   } 
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : ensure_only_members(const Value& v, const char** fields, int nvalid)" <<endl<<endl;
 }
 
 
 void RegisterMakers() {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  RegisterMakers "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
 
   TermInfo::RegisterMaker("pose", &PoseCostInfo::create);
   TermInfo::RegisterMaker("joint_pos", &JointPosCostInfo::create);
@@ -56,9 +71,21 @@ void RegisterMakers() {
   TermInfo::RegisterMaker("joint_vel_limits", &JointVelConstraintInfo::create);
 
   gRegisteredMakers = true;
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : RegisterMakers" <<endl<<endl;
+
 }
 
 RobotAndDOFPtr RADFromName(const string& name, RobotBasePtr robot) {
+
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  RADFromName(const string& name, RobotBasePtr robot) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+
   if (name == "active") {
     return RobotAndDOFPtr(new RobotAndDOF(robot, robot->GetActiveDOFIndices(), robot->GetAffineDOF(), robot->GetAffineRotationAxis()));
   }
@@ -81,7 +108,13 @@ RobotAndDOFPtr RADFromName(const string& name, RobotBasePtr robot) {
     }
     else PRINT_AND_THROW( boost::format("error in reading manip description: %s must be a manipulator, link, or 'base'")%component );
   }
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : RADFromName(const string& name, RobotBasePtr robot)" <<endl<<endl;
+
   return RobotAndDOFPtr(new RobotAndDOF(robot, dof_inds, affinedofs, rotationaxis));
+
+
 }
 
 
@@ -102,14 +135,33 @@ bool allClose(const VectorXd& a, const VectorXd& b) {
 namespace Json { //funny thing with two-phase lookup
 
 void fromJson(const Json::Value& v, Vector3d& x) {
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  fromJson(const Json::Value& v, Vector3d& x) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
   vector<double> vx;
   fromJsonArray(v, vx, 3);
   x = Vector3d(vx[0], vx[1], vx[2]);
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : fromJson(const Json::Value& v, Vector3d& x)" <<endl<<endl;
+
 }
 void fromJson(const Json::Value& v, Vector4d& x) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  fromJson(const Json::Value& v, Vector4d& x) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
   vector<double> vx;
   fromJsonArray(v, vx, 4);
-    x = Vector4d(vx[0], vx[1], vx[2], vx[3]);
+  x = Vector4d(vx[0], vx[1], vx[2], vx[3]);
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : fromJson(const Json::Value& v, Vector4d& x)" <<endl<<endl;
+
 }
 
 }
@@ -119,18 +171,37 @@ namespace trajopt {
 TRAJOPT_API ProblemConstructionInfo* gPCI;
 
 void BasicInfo::fromJson(const Json::Value& v) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  BasicInfo::fromJson(const Json::Value& v) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+
   childFromJson(v, start_fixed, "start_fixed", true);
   childFromJson(v, n_steps, "n_steps");
   childFromJson(v, manip, "manip");
   childFromJson(v, robot, "robot", string(""));
   childFromJson(v, dofs_fixed, "dofs_fixed", IntVec());
   // TODO: optimization parameters, etc?
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : BasicInfo::fromJson(const Json::Value& v)" <<endl<<endl;
 }
 
 
 ////
 bool gReadingCosts=false, gReadingConstraints=false;
+
+
 void fromJson(const Json::Value& v, TermInfoPtr& term) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  fromJson(const Json::Value& v, TermInfoPtr& term) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+
   string type;
   childFromJson(v, type, "type");
   LOG_DEBUG("reading term: %s", type.c_str());
@@ -148,6 +219,11 @@ void fromJson(const Json::Value& v, TermInfoPtr& term) {
   else assert(0 && "shouldnt happen");
   term->fromJson(v);
   childFromJson(v, term->name, "name", type);
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : fromJson(const Json::Value& v, TermInfoPtr& term)" <<endl<<endl;
+
+
 }
 
 std::map<string, TermInfo::MakerFunc> TermInfo::name2maker;
@@ -156,6 +232,10 @@ void TermInfo::RegisterMaker(const std::string& type, MakerFunc f) {
 }
 
 TermInfoPtr TermInfo::fromName(const string& type) {
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  InitInfo::fromJson(const Json::Value& v) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
   if (!gRegisteredMakers) RegisterMakers();
   if (name2maker.find(type) != name2maker.end()) {
     return (*name2maker[type])();
@@ -164,9 +244,19 @@ TermInfoPtr TermInfo::fromName(const string& type) {
     RAVELOG_ERROR("There is no cost of type %s\n", type.c_str());
     return TermInfoPtr();
   }
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : TermInfoPtr TermInfo::fromName(const string& type)" <<endl<<endl;
 }
 
 void InitInfo::fromJson(const Json::Value& v) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  InitInfo::fromJson(const Json::Value& v) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+
   string type_str;
   childFromJson(v, type_str, "type");
   int n_steps = gPCI->basic_info.n_steps;
@@ -202,10 +292,24 @@ void InitInfo::fromJson(const Json::Value& v) {
     }
   }
 
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : InitInfo::fromJson(const Json::Value& v) " <<endl<<endl;
+
 }
 
 void ProblemConstructionInfo::fromJson(const Value& v) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  ProblemConstructionInfo::fromJson(const Value& v) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+  cout << "v :"<<endl;
+  cout <<v;
+
   childFromJson(v, basic_info, "basic_info");
+  cout<<" BasicInfo :"<<endl;
+  cout<<basic_info.robot<<endl;
 
   RobotBasePtr robot = (basic_info.robot=="") ? GetRobot(*env) : GetRobotByName(*env, basic_info.robot);
   if (!robot) {
@@ -227,6 +331,11 @@ void ProblemConstructionInfo::fromJson(const Value& v) {
 
   childFromJson(v, init_info, "init_info");
   gPCI = NULL;
+  cout<<"init_info :"<<endl;
+  cout <<init_info.data;
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : ProblemConstructionInfo::fromJson(const Value& v) " <<endl<<endl;
 
 }
 
@@ -243,6 +352,11 @@ TrajOptResult::TrajOptResult(OptResults& opt, TrajOptProb& prob) :
 }
 
 TrajOptResultPtr OptimizeProblem(TrajOptProbPtr prob, bool plot) {
+   cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :   TrajOptResultPtr OptimizeProblem(TrajOptProbPtr prob, bool plot)"<< endl;
+  cout<<"----------------------------------------------------"<<endl;
+
   Configuration::SaverPtr saver = prob->GetRAD()->Save();
   BasicTrustRegionSQP opt(prob);
   opt.max_iter_ = 40;
@@ -254,10 +368,18 @@ TrajOptResultPtr OptimizeProblem(TrajOptProbPtr prob, bool plot) {
   }
   opt.initialize(trajToDblVec(prob->GetInitTraj()));
   opt.optimize();
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : TrajOptResultPtr OptimizeProblem(TrajOptProbPtr prob, bool plot)" <<endl<<endl;
+  
   return TrajOptResultPtr(new TrajOptResult(opt.results(), *prob));
 }
 
 TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo& pci) {
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp" << endl;
+  cout<<" Function :  TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo& pci) "<< endl;
+  cout<<"----------------------------------------------------"<<endl;
 
   const BasicInfo& bi = pci.basic_info;
   int n_steps = bi.n_steps;
@@ -266,11 +388,19 @@ TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo& pci) {
   TrajOptProbPtr prob(new TrajOptProb(n_steps, pci.rad));
 
   TrajArray init = prob->GetInitTraj();
-  cout << endl << "TrajArray :" << init << endl ;
+  // cout << "TrajArray :" << init.size() << endl ;
 
   int n_dof = prob->m_rad->GetDOF();
+  cout<< "n_dof :" <<n_dof <<endl;
 
   DblVec cur_dofvals = prob->m_rad->GetDOFValues();
+
+  cout<<"These are joint_start values."<<endl;
+  cout<<"cur_dofvals :" <<endl;
+
+  for(int i = 0;i < cur_dofvals.size(); i++){
+    cout <<"cur_dofvals = " << cur_dofvals[i]<< " at i = "<<i <<endl;
+  }
 
   if (bi.start_fixed) {
     if (pci.init_info.data.rows() > 0 && !allClose(toVectorXd(cur_dofvals), pci.init_info.data.row(0))) {
@@ -297,14 +427,21 @@ TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo& pci) {
   }
 
   prob->SetInitTraj(pci.init_info.data);
-
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END : TrajOptProbPtr ConstructProblem(const ProblemConstructionInfo& pci)" <<endl<<endl;
   return prob;
 
 }
 TrajOptProbPtr ConstructProblem(const Json::Value& root, OpenRAVE::EnvironmentBasePtr env) {
   ProblemConstructionInfo pci(env);
   pci.fromJson(root); // Jumps to ProblemConstructionInfo::fromJson()
-  cout <<"Basic Info --- Construct Problem----" <<endl;
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp " << endl;
+  cout<<" Function :  TrajOptProbPtr ConstructProblem(const Json::Value& root, OpenRAVE::EnvironmentBasePtr env)" << endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+  cout <<"Basic Info :" <<endl;
 
   //  bool start_fixed;
   // int n_steps;
@@ -323,7 +460,14 @@ TrajOptProbPtr ConstructProblem(const Json::Value& root, OpenRAVE::EnvironmentBa
   for (int i = 0; i < pci.cost_infos.size();i++){
     cout<< "cost_infos "<< pci.cost_infos[i] <<endl;  
   }
+
+
+  cout<<" Init Info contains no. of steps from basic info."<<endl;
+  cout<<"PCI : InitInfo "<<endl;
+  cout<< "init_infos :"<<endl<< pci.init_info.data <<endl;  
     
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END  : TrajOptProbPtr ConstructProblem(const Json::Value& root, OpenRAVE::EnvironmentBasePtr env)" <<endl<<endl;
   return ConstructProblem(pci);
 }
 
@@ -369,6 +513,14 @@ void SetupPlotting(TrajOptProb& prob, Optimizer& opt) {
 
 
 void PoseCostInfo::fromJson(const Value& v) {
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout<<" File     :  problem_description.cpp " << endl;
+  cout<<" Function :  PoseCostInfo::fromJson(const Value& v)" << endl;
+  cout<<"----------------------------------------------------"<<endl;
+
+
+
   FAIL_IF_FALSE(v.isMember("params"));
   const Value& params = v["params"];  
   childFromJson(params, timestep, "timestep", gPCI->basic_info.n_steps-1);
@@ -386,6 +538,10 @@ void PoseCostInfo::fromJson(const Value& v) {
 
   const char* all_fields[] = {"timestep", "xyz", "wxyz", "pos_coeffs", "rot_coeffs","link"};
   ensure_only_members(params, all_fields, sizeof(all_fields)/sizeof(char*));
+
+
+  cout<<"----------------------------------------------------"<<endl;
+  cout << "END  : PoseCostInfo::fromJson(const Value& v)" <<endl<<endl;
 
 }
 
